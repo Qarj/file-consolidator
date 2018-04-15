@@ -36,15 +36,20 @@ def verbose(out):
 def output(out):
     global stdout
     if (output_immediately):
-        try:
-            print(out, flush=True)
-        except UnicodeEncodeError:
-            try:
-                print(out.encode('utf8').decode(sys.stdout.encoding))
-            except UnicodeDecodeError:
-                print('Sorry Unicode error...')
+        unicode_output(out)
     else:
         stdout += out + "\n"
+
+def unicode_output(out):
+    # when printing directly to the windows console stdout, unicode errors tend to be ignored automatically
+    # if the user redirects stdout to a file, unicode errors can occurr - this code outputs the best it can and flags errors in the output
+    try:
+        print(out, flush=True)
+    except UnicodeEncodeError:
+        try:
+            print(out.encode('utf8').decode(sys.stdout.encoding))
+        except UnicodeDecodeError:
+            print(out.encode('utf8').decode(sys.stdout.encoding, errors='ignore')  + ' <-- UnicodeDecodeError')
 
 def fcon(path):
     output('\n' + time.strftime('%X : ') +  'Consolidating files in subfolders of ' + path + '\n')
@@ -110,9 +115,6 @@ set_trial_move(args.trial_move)
 if (args.path):
     fcon(args.path)
     if (not output_immediately):
-        print('\nConsolidating...\n')
-        try:
-            print(stdout)
-        except UnicodeEncodeError:
-            print(stdout.encode('utf8').decode(sys.stdout.encoding))
+        print('\nConsolidating...')
+        unicode_output(stdout)
     sys.exit()

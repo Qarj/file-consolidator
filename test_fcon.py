@@ -67,7 +67,7 @@ class Testfcon(unittest.TestCase):
 
     def test_unicode_files(self):
         response = fcon('test/unicode_files')
-        self.assertRegex (response, '5 files moved')
+        self.assertRegex (response, '6 files moved')
 
     def test_print_summary(self):
         response = fcon('test/two_files')
