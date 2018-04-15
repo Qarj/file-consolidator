@@ -52,17 +52,19 @@ def fcon(path):
 
     file_count = 0
 
-    processed_root = False
-    for root, dirs, files in os.walk(path):
+    processed_root = False # files in root path do not need to be moved to where they already are
+    for root, folders, files in os.walk(path):
         if (processed_root == False):
             processed_root = True
             continue
+
         files.sort()
-        for file_name in files:
+
+        for basename in files:
             file_count += 1
-            current_file_path = os.path.join(root,file_name)
+            current_file_path = os.path.join(root, basename)
             verbose('Processing file ' + current_file_path)
-            consolidate_file(root,file_name,path)
+            consolidate_file(root, basename, path)
 
     output('\n' + time.strftime('%X : ') + str(file_count) + ' files moved, in ' + str(round(time.time()-start_time, 3)) + ' seconds')
 
@@ -71,24 +73,24 @@ def fcon(path):
 
     return stdout
 
-def consolidate_file(root,file_name,destination_path):
-    destination_file_path = determine_unique_destination_file_path(root,file_name,destination_path)
+def consolidate_file(root, source_basename, destination_path):
+    destination_file_path = determine_unique_destination_file_path(source_basename, destination_path)
 
-    current_file_path = os.path.join(root,file_name)
+    source_file_path = os.path.join(root, source_basename)
     if (not trial_move):
-        shutil.move(current_file_path, destination_file_path)
+        shutil.move(source_file_path, destination_file_path)
 
     rename_message = ''
     destination_basename = os.path.basename(destination_file_path)
-    if (file_name != destination_basename):
+    if (source_basename != destination_basename):
         rename_message = ' --> ' + destination_basename
     
-    output('... moved ' + file_name + rename_message)
+    output('... moved ' + source_basename + rename_message)
 
-def determine_unique_destination_file_path(root,file_name,destination_folder):
-    destination_file_basename, destination_file_extension = os.path.splitext(file_name)
+def determine_unique_destination_file_path(source_basename, destination_folder):
+    destination_file_basename, destination_file_extension = os.path.splitext(source_basename)
     while (True):
-        destination_file_path = os.path.join(destination_folder,destination_file_basename+destination_file_extension)
+        destination_file_path = os.path.join(destination_folder, destination_file_basename+destination_file_extension)
         if (not os.path.isfile(destination_file_path)):
             return destination_file_path
         destination_file_basename += '-1'
