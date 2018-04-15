@@ -65,6 +65,10 @@ class Testfcon(unittest.TestCase):
         self.assertTrue (os.path.isfile('test/move_three_files/aaa-1.txt'))
         self.assertTrue (os.path.isfile('test/move_three_files/aaa-1-1.txt'))
 
+    def test_unicode_files(self):
+        response = fcon('test/unicode_files')
+        self.assertRegex (response, '5 files moved')
+
     def test_print_summary(self):
         response = fcon('test/two_files')
         self.assertRegex (response, 'files moved')
