@@ -60,10 +60,10 @@ class Testfcon(unittest.TestCase):
         set_trial_move(True)
         self.assertRegex (response, '... moved aaa.txt\n')
         self.assertRegex (response, '... moved aaa.txt --> aaa-1.txt')
-        self.assertRegex (response, '... moved aaa.txt --> aaa-1-1.txt')
+        self.assertRegex (response, '... moved aaa.txt --> aaa-2.txt')
         self.assertTrue (os.path.isfile('test/move_three_files/aaa.txt'))
         self.assertTrue (os.path.isfile('test/move_three_files/aaa-1.txt'))
-        self.assertTrue (os.path.isfile('test/move_three_files/aaa-1-1.txt'))
+        self.assertTrue (os.path.isfile('test/move_three_files/aaa-2.txt'))
 
     def test_unicode_files(self):
         response = fcon('test/unicode_files')

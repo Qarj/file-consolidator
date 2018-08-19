@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 version="0.1.0"
 
-import sys, argparse, os, stat, time, shutil
+import sys, argparse, os, stat, time, shutil, re
 
 # Flags
 verbose_output = None
@@ -98,7 +98,13 @@ def determine_unique_destination_file_path(source_basename, destination_folder):
         destination_file_path = os.path.join(destination_folder, destination_file_basename+destination_file_extension)
         if (not os.path.isfile(destination_file_path)):
             return destination_file_path
-        destination_file_basename += '-1'
+        m = re.search(r'-([0-9]+)$', destination_file_basename)
+        if (m):
+            count = int(m.group(1)) + 1
+            m2 = re.search(r'^(.*)-[0-9]+$', destination_file_basename)
+            destination_file_basename = m2.group(1) + '-' + str(count)
+        else:
+            destination_file_basename += '-1'
 
 parser = argparse.ArgumentParser(description='Consolidate files in sub folders at path directly into folder at path')
 parser.add_argument('--path', dest='path', required=False, action='store', help='Target path')
