@@ -98,11 +98,11 @@ def determine_unique_destination_file_path(source_basename, destination_folder):
         destination_file_path = os.path.join(destination_folder, destination_file_basename+destination_file_extension)
         if (not os.path.isfile(destination_file_path)):
             return destination_file_path
-        m = re.search(r'-([0-9]+)$', destination_file_basename)
-        if (m):
-            count = int(m.group(1)) + 1
-            m2 = re.search(r'^(.*)-[0-9]+$', destination_file_basename)
-            destination_file_basename = m2.group(1) + '-' + str(count)
+        count_found = re.search(r'-([0-9]+)$', destination_file_basename)
+        if (count_found):
+            count = int(count_found.group(1)) + 1
+            basename_without_count = re.search(r'^(.*)-[0-9]+$', destination_file_basename)
+            destination_file_basename = basename_without_count.group(1) + '-' + str(count)
         else:
             destination_file_basename += '-1'
 
