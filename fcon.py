@@ -56,6 +56,7 @@ def fcon(path):
     start_time = time.time()
 
     file_count = 0
+    folder_count = 0
 
     processed_root = False # files in root path do not need to be moved to where they already are
     for root, folders, files in os.walk(path):
@@ -69,7 +70,8 @@ def fcon(path):
             file_count += 1
             current_file_path = os.path.join(root, basename)
             verbose('Processing file ' + current_file_path)
-            consolidate_file(root, basename, path)
+            consolidate_file(root, basename, path, folder_count)
+        folder_count += 1
 
     output('\n' + time.strftime('%X : ') + str(file_count) + ' files moved, in ' + str(round(time.time()-start_time, 3)) + ' seconds')
 
@@ -78,8 +80,9 @@ def fcon(path):
 
     return stdout
 
-def consolidate_file(root, source_basename, destination_path):
-    destination_file_path = determine_unique_destination_file_path(source_basename, destination_path)
+def consolidate_file(root, source_basename, destination_path, folder_count):
+    prefix = (str(folder_count) + '-').zfill(4)
+    destination_file_path = determine_unique_destination_file_path(source_basename, destination_path, prefix)
 
     source_file_path = os.path.join(root, source_basename)
     if (not trial_move):
@@ -92,10 +95,10 @@ def consolidate_file(root, source_basename, destination_path):
     
     output('... moved ' + source_basename + rename_message)
 
-def determine_unique_destination_file_path(source_basename, destination_folder):
+def determine_unique_destination_file_path(source_basename, destination_folder, prefix):
     destination_file_basename, destination_file_extension = os.path.splitext(source_basename)
     while (True):
-        destination_file_path = os.path.join(destination_folder, destination_file_basename+destination_file_extension)
+        destination_file_path = os.path.join(destination_folder, prefix+destination_file_basename+destination_file_extension)
         if (not os.path.isfile(destination_file_path)):
             return destination_file_path
         count_found = re.search(r'-([0-9]+)$', destination_file_basename)

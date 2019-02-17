@@ -49,10 +49,10 @@ class Testfcon(unittest.TestCase):
         response = fcon('test/move_two_files')
         set_trial_move(True)
         self.assertRegex (response, '... moved bbb.txt')
-        self.assertTrue (os.path.isfile('test/move_two_files/bbb.txt'))
+        self.assertTrue (os.path.isfile('test/move_two_files/000-bbb.txt'))
         self.assertFalse (os.path.isfile('test/move_two_files/sub1/bbb.txt'))
 
-    def test_rename_file_if_needed_to_avoid_clash(self):
+    def test_rename_file_if_needed_to_avoid_clash_and_preserve_sort_order(self):
         shutil.rmtree('test/move_three_files', ignore_errors=True )
         shutil.rmtree('test/move_three_files', ignore_errors=True )
         shutil.rmtree('test/move_three_files', ignore_errors=True )
@@ -60,12 +60,14 @@ class Testfcon(unittest.TestCase):
         set_trial_move(False)
         response = fcon('test/move_three_files')
         set_trial_move(True)
-        self.assertRegex (response, '... moved aaa.txt\n')
-        self.assertRegex (response, '... moved aaa.txt --> aaa-1.txt')
-        self.assertRegex (response, '... moved aaa.txt --> aaa-2.txt')
-        self.assertTrue (os.path.isfile('test/move_three_files/aaa.txt'))
-        self.assertTrue (os.path.isfile('test/move_three_files/aaa-1.txt'))
-        self.assertTrue (os.path.isfile('test/move_three_files/aaa-2.txt'))
+        self.assertRegex (response, '... moved aaa.txt --> 000-aaa.txt\n')
+        self.assertRegex (response, '... moved bbb.txt --> 000-bbb.txt')
+        self.assertRegex (response, '... moved aaa.txt --> 001-aaa.txt')
+        self.assertRegex (response, '... moved aaa.txt --> 002-aaa-1.txt')
+        self.assertTrue (os.path.isfile('test/move_three_files/000-aaa.txt'))
+        self.assertTrue (os.path.isfile('test/move_three_files/001-aaa.txt'))
+        self.assertTrue (os.path.isfile('test/move_three_files/002-aaa-1.txt'))
+        self.assertTrue (os.path.isfile('test/move_three_files/002-aaa.txt'))
 
     def test_unicode_files(self):
         response = fcon('test/unicode_files')
