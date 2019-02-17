@@ -25,7 +25,7 @@ class Testfcon(unittest.TestCase):
     def tearDown(self):
         pass
 
-    # ToDo: Prepend the immediate parent folder name followed by an underscore
+    # ToDo: Only increment folder number if it contained files
 
     def test_verbose_output_enabled(self):
         response = fcon('test/one_file')
