@@ -1,6 +1,9 @@
-# file-consolidator 0.1.0
+# file-consolidator 0.2.0
 
-Consolidate files from subfolders of `--path` to `--path`, renaming if necessary.
+Consolidate files from sub folders of `--path` directly to `--path`
+
+Files moved will be given a numeric prefix according to their source folder
+to preserve sort order.
 
 ## Usage
 
