@@ -2,6 +2,7 @@
 import os
 import shutil
 import unittest
+
 from fcon import clear_globals_for_unittests, fcon, set_output_immediately, set_trial_move, set_verbose_output
 
 version = "0.1.1"
