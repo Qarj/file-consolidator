@@ -76,7 +76,7 @@ def fcon(path):
     # files in root path do not need to be moved to where they already are
     processed_root = False
     for root, folders, files in os.walk(path):
-        if processed_root == False:
+        if processed_root is False:
             processed_root = True
             continue
 
