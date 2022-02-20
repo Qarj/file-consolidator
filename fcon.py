@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
+import argparse
+import os
 import re
 import shutil
-import time
-import stat
-import os
-import argparse
 import sys
+import time
 
 version = "0.2.1"
 
@@ -56,7 +55,8 @@ def output(out):
 
 def unicode_output(out):
     # when printing directly to the windows console stdout, unicode errors tend to be ignored automatically
-    # if the user redirects stdout to a file, unicode errors can occurr - this code outputs the best it can and flags errors in the output
+    # if the user redirects stdout to a file, unicode errors can occur
+    # this code outputs the best it can and flags errors in the output
     try:
         print(out, flush=True)
     except UnicodeEncodeError:
