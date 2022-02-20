@@ -20,10 +20,13 @@ jobs:
             - name: Investigation 3
               run: pwd
 
+            - name: Investigation 4
+              run: echo $GITHUB_WORKSPACE
+
             - name: Lint Code Base
               uses: github/super-linter@v4
               env:
                   DEFAULT_BRANCH: master
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  PYTHON_BLACK_CONFIG_FILE: ../../../$GITHUB_WORKSPACE/pyproject.toml
-                  PYTHON_ISORT_CONFIG_FILE: ../../../$GITHUB_WORKSPACE/pyproject.toml
+                  PYTHON_BLACK_CONFIG_FILE: ../../../"$GITHUB_WORKSPACE"/pyproject.toml
+                  PYTHON_ISORT_CONFIG_FILE: ../../../"$GITHUB_WORKSPACE"/.github/linters/isort.cfg
