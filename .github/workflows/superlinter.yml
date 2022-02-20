@@ -11,10 +11,16 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v2
 
+            - name: Investigation 1
+              run: ls -asl
+
+            - name: Investigation 2
+              run: ls -asl $GITHUB_WORKSPACE
+
             - name: Lint Code Base
               uses: github/super-linter@v4
               env:
                   DEFAULT_BRANCH: master
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  PYTHON_BLACK_CONFIG_FILE: /pyproject.toml
-                  PYTHON_ISORT_CONFIG_FILE: /pyproject.toml
+                  PYTHON_BLACK_CONFIG_FILE: ../../../file-consolidator/pyproject.toml
+                  PYTHON_ISORT_CONFIG_FILE: ../../../$GITHUB_WORKSPACE/file-consolidator/pyproject.toml
