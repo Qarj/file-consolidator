@@ -15,13 +15,13 @@ jobs:
               run: ls -asl
 
             - name: Investigation 2
-              run: ls -asl $GITHUB_WORKSPACE
+              run: ls -asl "$GITHUB_WORKSPACE"
 
             - name: Investigation 3
               run: pwd
 
             - name: Investigation 4
-              run: echo $GITHUB_WORKSPACE
+              run: echo "$GITHUB_WORKSPACE"
 
             - name: Lint Code Base
               uses: github/super-linter@v4
