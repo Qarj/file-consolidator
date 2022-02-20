@@ -1,5 +1,7 @@
 # file-consolidator 0.2.1
 
+[![GitHub Super-Linter](https://github.com/Qarj/file-consolidator/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 Consolidate files from sub folders of `--path` directly to `--path`
 
 Files moved will be given a numeric prefix according to their source folder
