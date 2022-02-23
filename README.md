@@ -13,13 +13,13 @@ to preserve sort order.
 Trial mode:
 
 ```sh
-fcon.py --path test/three_files --trial
+fcon --path test/three_files --trial
 ```
 
 Move the files:
 
 ```sh
-fcon.py --path test/three_files
+fcon --path test/three_files
 ```
 
 Careful !!! This has the potential to mess up your file system very quickly and drastically!
@@ -27,19 +27,19 @@ Careful !!! This has the potential to mess up your file system very quickly and 
 Version
 
 ```sh
-fcon.py --version
+fcon --version
 ```
 
 Verbose output
 
 ```sh
-fcon.py --verbose
+fcon --verbose
 ```
 
 Delayed output - show STDOUT at end rather than immediate
 
 ```sh
-fcon.py --delayed
+fcon --delayed
 ```
 
 ## Debian / Ubuntu installation
@@ -47,23 +47,23 @@ fcon.py --delayed
 Clone project
 
 ```sh
-mkdir ~/git
-cd ~/git
+mkdir $HOME/git
+cd $HOME/git
 git clone https://github.com/Qarj/file-consolidator
 ```
 
-Copy to path and activate
+Create symbolic link and activate
 
 ```sh
-cd file-consolidator
-sudo cp fcon.py /usr/local/bin
-sudo chmod +x /usr/local/bin/fcon.py
-fcon.py --version
+cd $HOME/git/file-consolidator
+chmod +x fcon.py
+sudo ln -sf $HOME/git/file-consolidator/fcon.py /usr/local/bin/fcon
+fcon --version
 ```
 
 ## Run the unit tests
 
 ```sh
 chmod +x test_fcon.py
-./test_fcon.py
+python3 test_fcon.py
 ```
