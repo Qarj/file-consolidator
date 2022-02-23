@@ -1,0 +1,28 @@
+---
+name: Tests
+
+on: push
+
+jobs:
+    test:
+        name: Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Set up Python
+              uses: actions/setup-python@v2
+
+            - name: Run the tests
+              run: python test_fcon.py
+
+            - name: Lint Code Base
+              uses: github/super-linter@v4
+              env:
+                  VALIDATE_YAML: false
+                  DEFAULT_BRANCH: master
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  LINTER_RULES_PATH: /
+                  PYTHON_BLACK_CONFIG_FILE: pyproject.toml
+                  PYTHON_ISORT_CONFIG_FILE: ./.github/linters/.isort.cfg
