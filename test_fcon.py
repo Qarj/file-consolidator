@@ -3,7 +3,14 @@ import os
 import shutil
 import unittest
 
-from fcon import clear_globals_for_unittests, fcon, set_output_immediately, set_trial_move, set_verbose_output
+from fcon import (
+    clear_globals_for_unittests,
+    fcon,
+    set_output_immediately,
+    set_trial_move,
+    set_verbose_output,
+    set_no_rename,
+)
 
 version = "0.1.1"
 
@@ -75,11 +82,29 @@ class Testfcon(unittest.TestCase):
 
     def test_unicode_files(self):
         response = fcon("test/unicode_files")
-        self.assertRegex(response, "6 files moved")
+        self.assertRegex(response, "0 files moved")
 
     def test_print_summary(self):
         response = fcon("test/two_files")
         self.assertRegex(response, "files moved")
+
+    def test_no_rename(self):
+        shutil.rmtree("test/norename_three_files", ignore_errors=True)
+        shutil.rmtree("test/norename_three_files", ignore_errors=True)
+        shutil.rmtree("test/norename_three_files", ignore_errors=True)
+        shutil.copytree("test/three_files", "test/norename_three_files")
+        set_trial_move(False)
+        set_no_rename(True)
+        response = fcon("test/norename_three_files")
+        set_no_rename(False)
+        set_trial_move(True)
+        self.assertRegex(response, "... moved aaa.txt\n")
+        self.assertRegex(response, "... moved bbb.txt\n")
+        self.assertRegex(response, "... skipping test/norename_three_files/sub1/sub2/aaa.txt\n")
+        self.assertRegex(response, "... skipping test/norename_three_files/sub1/sub2/sub3/aaa.txt\n")
+        self.assertRegex(response, "2 files moved")
+        self.assertTrue(os.path.isfile("test/norename_three_files/aaa.txt"))
+        self.assertTrue(os.path.isfile("test/norename_three_files/aaa.txt"))
 
 
 if __name__ == "__main__":

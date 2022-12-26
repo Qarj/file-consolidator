@@ -1,4 +1,4 @@
-# file-consolidator 0.2.1
+# file-consolidator 0.3.0
 
 [![GitHub Super-Linter](https://github.com/Qarj/file-consolidator/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 ![Tests](https://github.com/Qarj/file-consolidator/workflows/Tests/badge.svg)
@@ -23,6 +23,12 @@ fcon --path test/three_files
 ```
 
 Careful !!! This has the potential to mess up your file system very quickly and drastically!
+
+Do not rename files, skip conflicts:
+
+```sh
+fcon --path test/three_files --no-rename
+```
 
 Version
 

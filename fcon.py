@@ -6,22 +6,28 @@ import shutil
 import sys
 import time
 
-version = "0.2.1"
+version = "0.3.0"
 
 
 # Flags
 verbose_output = None
 output_immediately = None
 trial_move = None
+no_rename = None
 
 # Globals
 stdout = ""
 failed_move_count = 0
+moved_count = 0
 
 
 def clear_globals_for_unittests():
     global stdout
     stdout = ""
+    global failed_move_count
+    global moved_count
+    failed_move_count = 0
+    moved_count = 0
 
 
 def set_verbose_output(b):
@@ -32,6 +38,11 @@ def set_verbose_output(b):
 def set_output_immediately(b):
     global output_immediately
     output_immediately = b
+
+
+def set_no_rename(b):
+    global no_rename
+    no_rename = b
 
 
 def set_trial_move(b):
@@ -72,6 +83,7 @@ def fcon(path):
 
     file_count = 0
     folder_count = 0
+    global moved_count
 
     # files in root path do not need to be moved to where they already are
     processed_root = False
@@ -92,7 +104,7 @@ def fcon(path):
     output(
         "\n"
         + time.strftime("%X : ")
-        + str(file_count)
+        + str(moved_count)
         + " files moved, in "
         + str(round(time.time() - start_time, 3))
         + " seconds"
@@ -108,9 +120,16 @@ def consolidate_file(root, source_basename, destination_path, folder_count):
     prefix = (str(folder_count) + "-").zfill(4)
     destination_file_path = determine_unique_destination_file_path(source_basename, destination_path, prefix)
 
+    global moved_count
+
     source_file_path = os.path.join(root, source_basename)
     if not trial_move:
-        shutil.move(source_file_path, destination_file_path)
+        if not os.path.isfile(destination_file_path):
+            shutil.move(source_file_path, destination_file_path)
+            moved_count += 1
+        else:
+            output("... skipping " + source_file_path)
+            return
 
     rename_message = ""
     destination_basename = os.path.basename(destination_file_path)
@@ -123,6 +142,8 @@ def consolidate_file(root, source_basename, destination_path, folder_count):
 def determine_unique_destination_file_path(source_basename, destination_folder, prefix):
     destination_file_basename, destination_file_extension = os.path.splitext(source_basename)
     while True:
+        if no_rename:
+            return os.path.join(destination_folder, destination_file_basename + destination_file_extension)
         destination_file_path = os.path.join(
             destination_folder, prefix + destination_file_basename + destination_file_extension
         )
@@ -151,6 +172,13 @@ parser.add_argument(
     help="Will display stdout at end instead of immediately",
 )
 parser.add_argument(
+    "--no-rename",
+    action="store_true",
+    dest="no_rename",
+    default=False,
+    help="Does not rename files, skips files with duplicate names",
+)
+parser.add_argument(
     "--trial",
     action="store_true",
     dest="trial_move",
@@ -161,6 +189,7 @@ parser.add_argument(
 args = parser.parse_args()
 set_verbose_output(args.verbose)
 set_output_immediately(not args.output_delayed)
+set_no_rename(args.no_rename)
 set_trial_move(args.trial_move)
 
 if args.path:
