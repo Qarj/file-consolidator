@@ -6,10 +6,10 @@ import unittest
 from fcon import (
     clear_globals_for_unittests,
     fcon,
+    set_no_rename,
     set_output_immediately,
     set_trial_move,
     set_verbose_output,
-    set_no_rename,
 )
 
 version = "0.1.1"
